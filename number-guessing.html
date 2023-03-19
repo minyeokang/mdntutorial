@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <title>Number guessing game</title>
+    <style>
+      html { font-family: sans-serif; } body { width: 100vw; height: 100vh; margin: 0; padding: 0; } .flex{display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; } .wrapper{max-width: 800px; min-width: 500px; border: 3px solid sandybrown; padding: 20px; }.form input[type="number"] { width: 200px; } .lastResult { color: white; padding: 3px; } .resultParas{ margin-top: 20px; border-top: 3px solid transparent; } h1{margin-bottom: 30px;}
+    </style>
+  </head>
+
+  <body>
+    <div class="flex">
+        <div class="wrapper">
+            <h1>Number guessing game</h1>
+    
+            <p>We have selected a random number between 1 and 100. <br> See if you can guess it in 10 turns or fewer. <br>We'll tell you if your guess was too high or too low.</p>
+        
+            <div class="form">
+              <label for="guessField">Enter a guess: </label>
+              <input type="number" min="1" max="100" required id="guessField" class="guessField">
+              <input type="submit" class="guessSubmit">
+            </div>
+        
+            <div class="resultParas">
+              <p class="guessCounter"></p>
+              <p class="guesses"></p>
+              <p class="lastResult"></p>
+              <p class="lowOrHi"></p>
+              <p class="answer"></p>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        //1과 100사이 무작위 숫자 생성 - .floor는 소수점 이하 반올림 
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+        //가져와야 하는 요소들 및 기본 값 변수 
+        let select = s => document.querySelector(s),
+            guesses = select('.guesses'),
+            lastResult = select('.lastResult'),
+            lowOrHi = select('.lowOrHi'),
+            guessSubmit = select('.guessSubmit'),
+            guessField = select('.guessField'),
+            guessCounter = select('.guessCounter'),
+            fulldiv = select('.resultParas'),
+            answer = select('.answer'),
+            guessCount = 1,
+            resetButton;
+
+        //init
+        guessSubmit.addEventListener('click', checkGuess)
+        guessField.addEventListener('keypress', function(e){
+            e.keyCode == 13 ? checkGuess() : null; //if enter key is pressed, init function
+        })
+            
+        //입력된 숫자를 검사하는 함수 
+        function checkGuess(e){
+                
+            const inputGuess = Number(guessField.value); //making sure it's number 
+
+            //don't take number higher than 100
+            if(inputGuess > 100){
+                 alert('the number should be lower than 100'); 
+                 guessField.value = '';
+                 guessField.focus();
+                 return false;
+            }
+
+            fulldiv.style.borderColor = 'seagreen'; //set them transparent as default for styling 
+            guesses.textContent = 'previous guess is : ' + inputGuess; //show input value 
+
+            if(inputGuess === randomNumber){
+                //if the user guess the number 
+                lastResult.textContent = 'you got it right'; 
+                lastResult.style.backgroundColor = 'green';
+                lowOrHi.textContent = ''; //make it empty in case
+                setGameover();//call gameover function
+            }else if(guessCount === 10){
+                lastResult.textContent = 'game over'; 
+                lowOrHi.textContent = ''; 
+                setGameover();
+            } // finish game whether it's correct or over 10 guesses
+
+            else{
+                lastResult.textContent = "wrong!";
+                lastResult.style.backgroundColor = 'red';
+                if(inputGuess < randomNumber){
+                    lowOrHi.textContent = "hint : too low";
+                }else if(inputGuess > randomNumber){
+                    lowOrHi.textContent = "hint : too high"; 
+                }
+            }
+
+            guessCount++; //update the guessing number
+            guessCounter.textContent = 'guess counter : ' + guessCount;
+            answer.textContent = 'actually it is : ' + randomNumber;
+            guessField.value = ''; //ux
+            guessField.focus(); //ux
+        }        
+
+        function setGameover(){
+            //if game is over, disable fields and add reset btn to play again 
+            guessField.disabled = true;
+            guessSubmit.disabled = true; 
+            resetButton = document.createElement('button');
+            resetButton.textContent = 'start new game';
+            document.body.append(resetButton);
+            resetButton.addEventListener('click', resetGame);
+        }
+
+        function resetGame(){
+            //back to beginning 
+            guessCount = 1;
+
+            //get all of 'p' in the wrap div 
+            const resetParas = document.querySelectorAll('.resultParas p')
+            for(const resetPara of resetParas){
+                resetPara.textContent = ''; //make them empty 
+            }
+
+            //in order to call resetGame without calling setGameover, resetbtn should not be in place 
+            if(typeof(resetButton) != 'undefined' ){
+                resetButton.parentNode.removeChild(resetButton);
+            }
+
+            //re-do ux
+            guessField.disabled = false;
+            guessSubmit.disabled = false; 
+            guessField.value = '';
+            guessField.focus();
+            lastResult.style.backgroundColor ='white'; 
+            fulldiv.style.borderColor = 'transparent';
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+        }
+
+    </script>
+  </body>
+</html>
