@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <select class="select">
+            <option value="white">white</option>
+            <option value="yellow">yellow</option>
+            <option value="black">black</option>
+        </select>
+        <div class="output">this is my website</div>
+    </div>
+    <script>
+        const select = document.querySelector('select');
+        const html = document.querySelector('.output');
+        select.onchange = function() {
+            const choice = select.value;
+            if(choice == "black"){
+                update("white","red")
+            }
+            console.log(choice)
+            switch(choice){
+                case "yellow" :
+                update("white","yellow");
+                break;
+            }
+        }
+
+        function update(bgColor, textColor) {
+            html.style.backgroundColor = bgColor;
+            html.style.color = textColor;
+        }
+    </script>
+
+    <div class="guesslist">
+        <p class="admitted"></p>
+        <p class="refused"></p>
+    </div>
+    <script>
+        const people = ['Chris', 'Anne', 'Colin', 'Terri', 'Phil', 'Lola', 'Sam', 'Kay', 'Bruce'];
+
+        const admitted = document.querySelector('.admitted');
+        const refused = document.querySelector('.refused');
+        admitted.textContent = 'Admit: ';
+        refused.textContent = 'Refuse: '
+
+        for( let i = 0; i < people.length; i++){
+            // let checkthis = people.indexOf('Phil')
+            if(people[i] == 'Phil' || people[i] == 'Lola'){
+                refused.textContent += people[i] + ', ';
+            }else{
+                admitted.textContent += people[i] + ', ';
+            }
+
+        }
+
+        //mdn way
+        // let i = 0;
+        // do {
+        // if(people[i] === 'Phil' || people[i] === 'Lola') {
+        // refused.textContent += people[i] + ', ';
+        // } else {
+        // admitted.textContent += people[i] + ', ';
+        // }
+        // i++;
+        // } while(i < people.length);
+
+        //get rid of comma 
+        refused.textContent = refused.textContent.slice(0,refused.textContent.length-2) + '.';
+        admitted.textContent = admitted.textContent.slice(0,admitted.textContent.length-2) + '.';
+    </script>
+
+    <div class="section">
+    </div>
+    <script>
+        const para = document.createElement('p');
+
+        function isPrime(num) {
+        for(let i = 2; i < num; i++) {
+            if(num % i === 0) {
+            return false;
+            }
+        }
+            return true;
+        }
+
+        for(let i = 500; i > 1; i-- ){
+            if(isPrime(i) === true){
+                para.textContent += i + ' ';
+              
+            }
+        }
+        const section = document.querySelector('.section');
+        section.appendChild(para);
+    </script>
+
+</body>
+</html>
