@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
+        div{border: 1px solid #ddd; padding: 20px;}
+    </style>
+</head>
+<body>
+    <div class="example1">
+        <h2>sort strings which has Christmas in it </h2>
+        <ul class="list">
+        </ul>
+        <button class="sort">sort it out</button>
+    </div>
+    <script>
+        const list = document.querySelector('.list');
+        const greetings = ['Happy Birthday!',
+                 'Merry Christmas my love',
+                 'A happy Christmas to all the family',
+                 'You\'re all I want for Christmas',
+                 'Get well soon'];
+
+        for (let greeting of greetings){
+            if(greeting){
+                const listItem = document.createElement('li')
+                listItem.textContent = greeting;
+                list.appendChild(listItem)
+            }
+        }
+
+        const sortBtn = document.querySelector('.sort');
+        sortBtn.addEventListener('click',function(){
+            list.innerHTML = '';
+            for (let greeting of greetings){
+            if(greeting.includes('Christmas')){
+                const listItem = document.createElement('li')
+                listItem.textContent = greeting;
+                list.appendChild(listItem)
+            }
+        }
+        })
+    </script>
+    <div class="example2">
+        <h2>fix city names</h2>
+        <ul class="cities">
+        </ul>
+        <button class="change">change</button>
+    </div>
+    <script>
+        const cityList = document.querySelector('.cities');
+        const cities = ['lonDon', 'ManCHESTer', 'BiRmiNGHAM', 'liVERpoOL'];
+
+        for (let city of cities){
+            const cityItem = document.createElement('li')
+            cityItem.textContent = city;
+            cityList.appendChild(cityItem)
+        }
+
+        const chgBtn = document.querySelector('.change');
+        chgBtn.addEventListener('click',function(){
+            cityList.innerHTML = '';
+            for (let city of cities){
+                //my way 
+                // let changeToLowerCase = city.toLowerCase();
+                // const cuttedText = changeToLowerCase.slice(1);
+                // let changeToUpperCase = city[0].toUpperCase();
+                // const finalResult = changeToUpperCase + cuttedText;
+
+                //mdn way 
+                const lower = city.toLowerCase();
+                const firstLetter = lower.slice(0,1); // 0번째에서 1개만 가져오기 
+                const capitalized = lower.replace(firstLetter, firstLetter.toUpperCase()) // 왼쪽 인자를 오른쪽 인자로 바꾸기 
+                const finalResult = capitalized;
+
+                const cityItem = document.createElement('li')
+                cityItem.textContent = finalResult;
+                cityList.appendChild(cityItem)
+            }
+        })
+    </script>
+    <div class="example3">
+        <h2>extract the code name</h2>
+        <ul class="stations">
+        </ul>
+        <button class="extract">extract</button>
+    </div>
+    <script>
+        const stationList = document.querySelector('.stations');
+        const stations = ['MAN675847583748sjt567654;Manchester Piccadilly',
+                  'GNF576746573fhdg4737dh4;Greenfield',
+                  'LIV5hg65hd737456236dch46dg4;Liverpool Lime Street',
+                  'SYB4f65hf75f736463;Stalybridge',
+                  'HUD5767ghtyfyr4536dh45dg45dg3;Huddersfield'];
+
+        for (let station of stations){
+            const stationItem = document.createElement('li')
+            stationItem.textContent = station;
+            stationList.appendChild(stationItem)
+        }
+
+        const etcbtn = document.querySelector('.extract');
+        etcbtn.addEventListener('click',function(){
+            stationList.innerHTML = '';
+            for (let station of stations){
+                const threeLetters = station.slice(0,3) 
+                const indexofsemicolon = station.indexOf(';')
+                const spliceIt = station.slice(indexofsemicolon + 1)//해당 인덱스부터 나머지 전부 가져오기
+                const result = `${threeLetters} :  ${spliceIt}`
+
+                const stationItem = document.createElement('li')
+                stationItem.textContent = result;
+                stationList.appendChild(stationItem)
+            }
+        })
+
+    </script>
+    <div class="example4">
+        <h2>array output</h2>
+        <ul class="merchans">
+        </ul>
+        <p class="total"></p>
+    </div>
+    <script>
+        const merchans = document.querySelector('.merchans');
+        const totalBox = document.querySelector('.total')
+        var total = 0;
+        var itemText = 0;
+        //이 부분이 for문 안에 들어가서 배열 한개만 나왔던 이슈 
+        merchans.innerHTML = '';
+        totalBox.textContent = '';
+
+        let products = ['Underpants:6.99', 'Socks:5.99', 'T-shirt:14.99', 'Trousers:31.99', 'Shoes:23.99'];
+        
+        for (var i = 0; i < products.length; i++) { 
+                //mdn way
+                var subArray = products[i].split(':') //배열 세분화 
+                var name = subArray[0]; //배열 0번째에 이름, 1번째에 가격 값 
+                var price = Number(subArray[1])
+                total += price;
+                itemText = name + ' - $' + price;
+                
+                //my way 
+                // let getIndex = products[i].indexOf(':')
+                // let itemPrice = products[i].slice(getIndex + 1)
+                // let itemName = products[i].slice(0, getIndex)
+                // let makeNumber = Number(itemPrice)
+                // const result = `${itemName} -- $${itemPrice}`
+                // total += makeNumber
+
+                const merchanItem = document.createElement('li')
+                merchanItem.textContent = itemText;
+                merchans.appendChild(merchanItem)
+
+            }
+            totalBox.textContent = 'Total: $' + total.toFixed(2) //Number로 바꿔주지 않으면 사용불가능
+    </script>
+    <div class="example5">
+        <h2>top 5 search result</h2>
+        <h3>live output shows maximum 5 list</h3>
+        <div class="output" style="min-height: 150px;">
+            <input type="text"><button>Search</button>
+            <ul>
+            </ul>
+        </div>
+    </div>
+    <script>
+        var outputList = document.querySelector('.output ul')
+        var searchInput = document.querySelector('.output input')
+        var searchBtn = document.querySelector('.output button')
+        outputList.innerHTML = '';
+        var myHistory = [];
+
+        searchBtn.onclick = function(){
+            console.log('test')
+            if(searchInput.value !== ''){
+                outputList.innerHTML = '';
+                myHistory.unshift(searchInput.value)
+                if(myHistory.length > 5){
+                    myHistory.pop()
+                }
+                for(let i = 0; i < myHistory.length; i++){
+                    
+                    listText = myHistory[i];
+                    var newItem = document.createElement('li')
+                    newItem.textContent = listText;
+                    outputList.appendChild(newItem);
+                }
+                searchInput.value = '';
+                searchInput.focus();
+            }
+        }
+    </script>
+
+    <script>
+        /***
+         * String to Array, Array to String 
+         ***/
+        var myData = 'Manchester,London,Liverpool,Birmingham,Leeds,Carlisle';
+        var myArray = myData.split(',')
+        //console.log('make array : ' + myArray) //['Manchester', 'London', 'Liverpool', 'Birmingham', 'Leeds', 'Carlisle'] 
+        var backToString = myArray.join(',') //or toString() = only takes ',', doesn't need params 
+        //console.log('make string: ' +backToString)//Manchester,London,Liverpool,Birmingham,Leeds,Carlisle
+
+        myArray.push('useful') //add it at last != pop
+        myArray.unshift('useful') //add it at first != shift
+
+        /***
+         * Array skill up 1
+         ***/
+        let newString = 'Ryu+Ken+Chun-Li+Cammy+Guile+Sakura+Sagat+Juri';
+        let stringsplit = newString.split('+'); //Array: Ryu,Ken,Chun-Li,Cammy,Guile,Sakura,Sagat,Juri
+        let arrayLength = stringsplit.length; //The length of the array is 8.
+        let lastItem = stringsplit.slice(-1) //The last item in the array is "Juri".
+    
+        /***
+         * Array skill up 2
+         ***/
+        let newArray = [ "Ryu", "Ken", "Chun-Li", "Cammy", "Guile", "Sakura", "Sagat", "Juri" ];
+
+        newArray.pop(-1);
+        newArray.push("minyeo","jack")
+        for(let i = 0; i < newArray.length; i++){
+           newArray[i] += (`(${i})`)
+        }
+
+        let myString = newArray.join("-")
+        //console.log(myString)//Ryu(0)-Ken(1)-Chun-Li(2)-Cammy(3)-Guile(4)-Sakura(5)-Sagat(6)-minyeo(7)-jack(8), type = string 
+        
+        /***
+         * Array skill up 3
+         ***/
+        let birds = [ "Parrots", "Falcons", "Eagles", "Emus", "Caracaras", "Egrets" ];
+
+        let eagles = birds.indexOf("Eagles") 
+        birds.splice(2, 1) //delete Eagles from array
+        
+        /*push it to empty array 
+        let eBirds = []
+        for(let i = 0; i <= birds.length - 1; i++){
+            if(birds[i].startsWith("E")){
+                eBirds.push(birds[i])
+            }
+        }*/
+    
+        //use filter 
+        function startsWithE(bird){
+            return bird.startsWith("E")
+        }
+        let eBirds = birds.filter(startsWithE) //fillter by boolean 
+
+
+        
+    </script>
+</body>
+</html>
