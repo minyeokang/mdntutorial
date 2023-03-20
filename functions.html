@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Function scope example</title>
+    <style>
+        canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+<body>
+  <script>
+    const xx = 1;
+
+    function a() {
+      const y = 2;
+      output(xx);
+    }
+    a() //this works because x is global variable 
+
+    function b() {
+      const z = 3;
+    }
+
+    function output(value) {
+      const para = document.createElement('p');
+      document.body.appendChild(para);
+      para.textContent = `Value: ${value}`;
+    }
+
+    output(xx) // value : 1
+    //output(y) // referenceError -> y is inside a function
+
+// ------------------------------------------------------------------
+
+    let abc = 1;
+    if(abc = 1){
+        var c = 4;
+    }
+    console.log(c)//this works because var is function scope not a block scope, if c is defined by const or let, it will throw error 
+
+
+// ------------------------------------------------------------------
+
+    //lexical scope, how to get something from inside function 
+    function outerFunc() {
+        // the outer scope
+        let outerVar = 'I am from outside!';
+
+        function innerFunc() {
+            // the inner scope
+            console.log(outerVar); // 'I am from outside!'
+        }
+
+        return innerFunc;
+    }
+
+    const inner = outerFunc();
+
+    inner(); //this works 
+
+// ------------------------------------------------------------------
+
+    //this able to reach that myValue by using parameters
+    function myBigFunction() {
+        var myValue = 'myBigFunction';
+        subFunction1(myValue);  
+    }
+
+    function subFunction1(val) {
+        console.log(val);
+    }
+
+    myBigFunction()
+
+  </script>
+
+  <div class="sec"></div>
+  <script>
+    const names = ['Chris', 'Li Kang', 'Anne', 'Francesca', 'Mustafa', 'Tina', 'Bert', 'Jada']
+    const para = document.createElement('p');
+
+    function chooseName(){
+        let randomName = Math.floor(Math.random()*names.length);
+        para.textContent = names[randomName];
+    }
+
+    chooseName()
+  
+    const section = document.querySelector('.sec')
+    section.innerHTML = ' ';
+    section.appendChild(para);
+  </script>
+
+  <div>
+    <section class="preview">
+    </section>
+  
+    <canvas width="480" height="320">
+    </canvas>
+  </div>
+  <script>
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const x = 50;
+    const y = 60;
+    const width = 100;
+    const height = 75;
+    const color = 'blue';
+
+    const newsec = document.querySelector('.preview');
+    drawcanvas()
+    function drawcanvas(){
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, width, height);
+    }
+  </script>
+
+</body>
+</html>
