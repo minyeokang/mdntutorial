@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Events: Task 2</title>
+    <style>
+      p { color: purple; margin: 0.5em 0; } * { box-sizing: border-box; } canvas { border: 1px solid black; } button { display: block; margin: 20px 0 20px 20px; } .button-bar { padding: 20px 0; }
+      h1 { font-family: helvetica, arial, sans-serif; text-align: center; } .wrapper { width: 640px; margin: 0 auto; margin-top: 100px; } .full-img { position: relative; display: block; width: 640px; height: 480px; } .overlay { position: absolute; top: 0; left: 0; width: 640px; height: 480px; background-color: rgba(0,0,0,0); } .wrapper button { border: 0; background: rgba(150,150,150,0.6); text-shadow: 1px 1px 1px white; border: 1px solid #999; position: absolute; cursor: pointer; top: 2px; left: 2px; } .thumb-bar img { display: block; width: 20%; float: left; cursor: pointer; } body{padding-bottom: 200px;}
+    </style>
+  </head>
+
+  <body>
+    <section class="preview">
+    </section>
+    <canvas width="480" height="320" tabindex="0">
+    </canvas>
+    <script>
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawCircle(x, y, size) {
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.fillStyle = 'black';
+      ctx.arc(x, y, size, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    let x = 50;
+    let y = 50;
+    const size = 30;
+
+
+    //move if wasd key is down 
+    window.addEventListener('keydown',function(e){
+        switch (e.keyCode){
+            case 87 : 
+            y--;
+            break;
+            case 65 : 
+            x--;
+            break;
+            case 83 : 
+            y++;
+            break;
+            case 68 : 
+            x++;
+            break;
+        }
+        drawCircle(x, y, size);
+
+    })
+    drawCircle(x, y, size);
+
+
+    </script>
+
+    <div class="button-bar">
+        <button data-color="red">Red</button>
+        <button data-color="yellow">Yellow</button>
+        <button data-color="green">Green</button>
+        <button data-color="purple">Purple</button>
+    </div>
+    <script>
+    //change bg color of buttonBar by dataset property 
+        const buttonBar = document.querySelector('.button-bar');
+        let newcolor;
+
+        buttonBar.addEventListener('click', function(e){
+            newcolor = e.target.dataset.color
+            buttonBar.style.backgroundColor = newcolor;
+        })
+    </script>
+    <div class="wrapper">
+        <h1>Image gallery example</h1>
+
+        <div class="full-img">
+            <img class="displayed-img" src="https://mdn.github.io/learning-area/javascript/building-blocks/gallery/images/pic2.jpg">
+            <div class="overlay"></div>
+            <button class="dark imgbtn">Darken</button>
+        </div>
+
+        <div class="thumb-bar">
+        </div>
+    </div>
+
+    <script>
+        const displayedImage = document.querySelector('.displayed-img');
+        const thumbBar = document.querySelector('.thumb-bar');
+
+        const btn = document.querySelector('.imgbtn');
+        const overlay = document.querySelector('.overlay');
+
+        const images = ['pic1.jpg', `pic2.jpg`, `pic3.jpg`, `pic4.jpg`, `pic5.jpg`]; //파일명 배열에 담기
+        const alts = {
+        'pic1.jpg' : 'Closeup of a human eye',
+        'pic2.jpg' : 'Rock that looks like a wave',
+        'pic3.jpg' : 'Purple and white pansies',
+        'pic4.jpg' : 'Section of wall from a pharoah\'s tomb',
+        'pic5.jpg' : 'Large moth on a leaf'
+        }
+
+        for (const image of images) {
+        const newImage = document.createElement('img'); //반복문 안에서 이미지 자체를 생성
+        newImage.setAttribute('src', `https://mdn.github.io/learning-area/javascript/building-blocks/gallery/images/${image}`); //경로 지정
+        newImage.setAttribute('alt', alts[image]);
+        thumbBar.appendChild(newImage);
+        newImage.addEventListener('click', e => { //클릭하면 디스플레이 속성값 변경해서 이미지 변경
+            displayedImage.src = e.target.src;
+            displayedImage.alt = e.target.alt;
+        });
+        }
+
+        btn.addEventListener('click', () => {
+        const btnClass = btn.getAttribute('class');
+        if (btnClass === 'dark') {
+            btn.setAttribute('class','light');
+            btn.textContent = 'Lighten';
+            overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        } else {
+            btn.setAttribute('class','dark');
+            btn.textContent = 'Darken';
+            overlay.style.backgroundColor = 'rgba(0,0,0,0)';
+        }
+        });
+    </script>
+
+  </body>
+</html>
