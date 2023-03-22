@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body { margin: 0; } html { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; height: 100%; } body { overflow: hidden; height: inherit; } h1 { font-size: 2rem; letter-spacing: -1px; position: absolute; margin: 0; top: -4px; right: 5px; color: transparent; text-shadow: 0 0 4px white; }
+        .band-name{display: none;}
+        .counter{position: absolute; margin: 0; top: 35px; right: 50px; color: #aaa; font-size: 20px;}
+    </style>
+</head>
+<body>
+    <p class="band-name"></p>
+
+    <script>
+        const albums = [{
+            name: 'maroon5',
+            nationality: 'united state',
+            albums: {name: 'moves like jagger', release: '2013'}
+        },{
+            name: 'why don\'t we',
+            nationality: 'united state',
+            albums: {name: 'don\'t', release: '2018'}
+        }]
+
+        const bandInfo = albums[0].name + albums[0].nationality + albums[0].albums.name;
+
+        const bandName = document.querySelector('.band-name')
+        bandName.textContent = bandInfo
+
+        //console.log에 return 값이 없는 function을 출력하면 콘솔은 무언가를 출력하여야 해서 undefined을 내뱉는다 
+    </script>
+
+    <script>
+    
+        var person1 = {}; //빈 객체 생성 - console에 {} 등장 
+
+        const person = {
+            name: ['minyeo', 'jack'],
+            gender: ['female', 'male'],
+            interests: ['travel', 'movie'],
+            bio: function(){
+                alert(this.name[0] + ' and ' + this.name[1] + ' are couple that likes ' + this.interests[0] + " and " + this.interests[1] + '.');
+            },
+            greeting: function(){
+                alert('hi i\'m' + this.name[0])
+            }
+        }
+
+        /**
+         * test your skills object 4 
+         * */
+        function Person(name) {
+            this.name = name;
+            this.introduceSelf = function() {
+                console.log(`Hi! I'm ${this.name}.`);
+            }
+        }
+        const cat = {
+            name : 'Bertie',
+            breed : 'Cymric',
+            color : 'white',
+            greeting: new Person(this.name)
+        }
+
+        const cat2 = {
+            name : 'Elfie',
+            breed : 'Aphrodite Giant',
+            color : 'ginger',
+            greeting: function() {
+                console.log(`Hello, said ${ this.name } the ${ this.breed }.`);
+            }
+        }
+
+        cat.greeting;
+        cat2.greeting();
+        var person2 = new Person('minyeo')
+        //프로토타입 객체는 모든 인스턴스에서 공유하기 때문에 즉시 이렇게 접근이 가능하다 
+        Person.prototype.farewell = function() {
+            alert(this.name + ' has left the building. Bye for now!');
+        }; 
+        //person2.farewell() 잘 작동함 
+
+        Person.prototype.x = 2;
+        //console.log(person2.x) 2가 출력
+
+        /**
+         * prototype & class
+         * */
+        //javascript = object oriented = 상속되는 속성과 메소드들은 객체 생성자의 prototype이라는 속성에 정의 되어있는 것 
+        function Teacher(name) {
+            Person.call(this,name);
+        }
+        Teacher.prototype = Object.create(Person.prototype)
+        Teacher.prototype.constructor = Teacher
+
+        Teacher.prototype.geeting = function(){
+            var prefix = "ms"
+            alert('Hello. My name is ' + prefix + ' ' );
+        }
+
+        var teacher1 =  new Teacher('jack')
+
+        class Personbyclass {
+            constructor(first, last, age){
+                this.name = {
+                    first,
+                    last
+                };
+                this.age = age;
+            }
+            greeting() {
+                console.log(`Hi! I'm ${this.name.first}`);
+            };    
+
+            farewell() {
+                console.log(`${this.name.first} has left the building. Bye for now!`);
+            };    
+        }
+
+    </script>
+    <p class="counter"></p>
+    <div class="bouce-ball">
+        <canvas></canvas>
+    </div>
+   <script>
+    const counter = document.querySelector('.counter')
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const width = canvas.width = window.innerWidth;
+    const height = canvas.height = window.innerHeight;
+
+    let newCounter = 0
+    
+    function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // function to generate random color
+    function randomRGB() {
+        return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
+    }
+
+    class Shape{
+        constructor(x, y, velX, velY){
+            this.x = x;
+            this.y = y;
+            this.velX = velX;
+            this.velY = velY;
+        }
+    }
+    class Ball extends Shape{
+        constructor(x, y, velX, velY, color, size){
+            super(x, y, velX, velY)
+            this.color = color;
+            this.size = size;
+            this.exist = true;
+        }
+        draw(){
+            ctx.beginPath();
+            ctx.fillStyle = this.color;
+            ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        update(){
+            //has the ball reached the edge of the canvas? 
+            if((this.x + this.size) >= width){
+                this.velX = -(Math.abs(this.velX));
+            }
+
+            if((this.x - this.size) <= 0){ //left edge because left is 0
+                this.velX = Math.abs(this.velX);
+            }
+
+            if((this.y + this.size) >= height){
+                this.velY = -(Math.abs(this.velY));
+            }
+
+            if((this.y - this.size) <= 0){
+                this.velY = Math.abs(this.velY);
+            }
+
+            //x에 제약 걸린 velX값을 추가시켜 이동 구현 
+            this.x += this.velX;
+            this.y += this.velY;
+        }
+
+        collisionDetect() {
+            for (const ball of balls) { //each of balls 
+                if (!(this === ball) && ball.exist) { //check is the current ball we are checking 
+                    const dx = this.x - ball.x;
+                    const dy = this.y - ball.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < this.size + ball.size) {
+                        ball.color = this.color = randomRGB();
+                    }
+                }
+            }
+            }
+    }
+
+    class EvilCircle extends Shape{
+        constructor(x, y){
+            super(x, y, 20, 20)
+            this.color = 'white'
+            this.size = 10
+            window.addEventListener('keydown', (e)=>{ //it doesn't fire unless arrow function.. 
+                console.log('test')
+                switch(e.key){
+                    case "a":
+                        this.x -= this.velX; //왼쪽으로 가기위해 마이너스 값 넣기 
+                        break; 
+                    case "d":
+                        this.x += this.velX;
+                        break;
+                    case "w":
+                        this.y -= this.velY;
+                        break;
+                    case "s":
+                        this.y += this.velY;
+                        break; 
+                }
+            })
+        }
+        draw(){
+            ctx.beginPath();
+            ctx.lineWidth = 3
+            ctx.strokeStyle = this.color
+            ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+            ctx.stroke()
+        }
+        checkBounds(){
+            if((this.x + this.size) >= width){
+                this.x -= this.size;
+            }
+
+            if((this.x - this.size) <= 0){ 
+                this.x += this.size;
+            }
+
+            if((this.y + this.size) >= height){
+                this.y -= this.size;
+            }
+
+            if((this.y - this.size) <= 0){
+                this.y += this.size;
+            }
+        }
+        collisionDetect(){
+            for (const ball of balls) {
+                if (ball.exist) { 
+                    const dx = this.x - ball.x;
+                    const dy = this.y - ball.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < this.size + ball.size) {
+                        //ball.color = this.color = randomRGB();
+                        //make them disappear not change color
+                        ball.exist = false;
+                        newCounter--;
+                        counter.textContent = `ball count: ${newCounter}`;
+                    }
+                }
+            }
+            
+        }
+        
+    }
+
+    const balls = [];
+
+    while(balls.length < 25) {
+        const size = random(10, 20);
+        const ball = new Ball(
+        random(0 + size, width - size),
+        random(0 + size, height - size),
+        random(-7,7),
+        random(-7,7),
+        randomRGB(),
+        size
+        );
+        newCounter++//처음부터 balls.length 가져갈 필요 없이 만드는 반복문에서 올려주면 됨 
+        counter.textContent = `ball count: ${newCounter}`;
+        balls.push(ball);
+    }
+
+    const evil = new EvilCircle(random(0, width), random(0, height))
+
+    function loop(){
+        //without these, you will see a snake worming around not a ball 
+        ctx.fillStyle = "rgba(0, 0, 0, 0.25)"; //if it's 1 instead of 0.25, you will see a clear ball no shadow
+        ctx.fillRect(0 ,0, width, height);
+        
+
+        for(const ball of balls){
+            if(ball.exist){//when collided, ball.exist becomes false, so withouht adjusting actual balls.length or size of ball, the ball disappear
+                ball.draw();
+            ball.update();
+            ball.collisionDetect();
+
+            }
+          
+        }
+        evil.draw()
+        evil.checkBounds()
+        evil.collisionDetect()
+        requestAnimationFrame(loop);
+    }
+
+    loop()
+
+
+   </script>
+
+</body>
+</html>
